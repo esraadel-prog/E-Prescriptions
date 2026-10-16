@@ -162,6 +162,7 @@ namespace ePrescriptions.App.ViewModels
 
         public ObservableCollection<PurchaseItemRow> CartItems { get; } = new();
         public ObservableCollection<Supplier> SuppliersList { get; } = new();
+        public ObservableCollection<Supplier> Suppliers => SuppliersList;
         public ObservableCollection<PurchaseInvoice> InvoicesHistory { get; } = new();
         public ObservableCollection<Item> AvailableItems { get; } = new();
         public ObservableCollection<Item> SearchResults { get; } = new();

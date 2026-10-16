@@ -662,7 +662,7 @@ namespace ePrescriptions.App.ViewModels
                 };
                 voucher.RecalculateTotals();
 
-                string phName = _settingsRepository?.GetSettings()?.PharmacyName ?? "صيدلية المستقبل";
+                string phName = _settingsRepository?.GetSettings()?.PharmacyNameAr ?? PharmacySettings.DefaultPharmacyName;
                 string path = await _excelExportService.ExportOpeningStockVoucherAsync(voucher, phName);
 
                 StatusMessage = $"تم تصدير ملف Excel بنجاح: {Path.GetFileName(path)}";

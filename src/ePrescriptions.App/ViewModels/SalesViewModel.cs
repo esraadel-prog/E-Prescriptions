@@ -752,6 +752,7 @@ namespace ePrescriptions.App.ViewModels
             get => _isViewingHistoricalInvoice;
             set => SetProperty(ref _isViewingHistoricalInvoice, value);
         }
+        public bool IsViewingPastInvoice => IsViewingHistoricalInvoice;
 
         private string _historicalInvoiceStatusText = string.Empty;
         public string HistoricalInvoiceStatusText

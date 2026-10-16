@@ -150,6 +150,7 @@ namespace ePrescriptions.Domain.Entities
         public int Id { get; set; } = 1;
         public string PharmacyNameAr { get; set; } = ePrescriptions.Domain.Entities.PharmacySettings.DefaultPharmacyName;
         public string PharmacyNameEn { get; set; } = string.Empty;
+        public string PharmacyName => !string.IsNullOrWhiteSpace(PharmacyNameAr) ? PharmacyNameAr : DefaultPharmacyName;
 
         /// <summary>الاسم الاحتياطي لو لسه مفيش اسم صيدلية اتكتب (بدون أي اسم شخصي)</summary>
         public const string DefaultPharmacyName = "الصيدلية";

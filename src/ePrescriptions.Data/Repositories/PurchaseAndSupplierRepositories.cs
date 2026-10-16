@@ -626,6 +626,8 @@ namespace ePrescriptions.Data.Repositories
             }
         }
 
+        public List<PurchaseInvoice> GetRecentPurchaseInvoices(int limit = 50) => GetAllPurchases(limit);
+
         public List<PurchaseInvoice> GetAllPurchases(int limit = 50)
         {
             var list = new List<PurchaseInvoice>();
