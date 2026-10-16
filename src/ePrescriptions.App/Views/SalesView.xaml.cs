@@ -42,6 +42,7 @@ namespace ePrescriptions.App.Views
                     {
                         tb.Focus();
                         tb.SelectAll();
+                    }
                 }
             }
         }
