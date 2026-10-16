@@ -1,0 +1,49 @@
+<Window x:Class="ePrescriptions.App.Views.FirstRunSetupWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="e_prescriptions - الإعداد الأول"
+        Icon="pack://application:,,,/Resources/app.ico"
+        Width="480" Height="640" MinWidth="420" MinHeight="420"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanResize"
+        FlowDirection="RightToLeft"
+        FontFamily="{StaticResource AppFontFamily}"
+        Background="#F8FAFC">
+
+    <Border Background="White" CornerRadius="16" BorderBrush="#CBD5E1" BorderThickness="1" Margin="12">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="24">
+                <TextBlock Text="أهلاً بك في e_prescriptions" FontSize="20" FontWeight="Bold" Foreground="#0A4C86" HorizontalAlignment="Center" />
+                <TextBlock Text="الإعداد الأول: بيانات الصيدلية وكلمة مرور صاحب الصيدلية"
+                           Foreground="#64748B" FontSize="12" HorizontalAlignment="Center" Margin="0,4,0,18" TextWrapping="Wrap" TextAlignment="Center" />
+
+                <TextBlock Text="اسم الصيدلية (اختياري):" FontWeight="SemiBold" Foreground="#3F5A73" Margin="0,0,0,4" />
+                <TextBox Text="{Binding PharmacyName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource AppTextBox}" />
+
+                <TextBlock Text="الرقم الضريبي - 9 أرقام (اختياري):" FontWeight="SemiBold" Foreground="#3F5A73" Margin="0,12,0,4" />
+                <TextBox Text="{Binding TaxNumber, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource AppTextBox}" />
+
+                <Border Height="1" Background="#E2E8F0" Margin="0,18,0,14" />
+
+                <TextBlock Text="كلمة مرور صاحب الصيدلية (حساب pharmacy_owner):" FontWeight="SemiBold" Foreground="#3F5A73" Margin="0,0,0,4" TextWrapping="Wrap" />
+                <PasswordBox PasswordChanged="TxtPassword_PasswordChanged" Height="36" FontSize="14" />
+                <TextBlock Text="8 حروف/أرقام على الأقل. احتفظ بيها: حساب صاحب الصيدلية مخفي ومفيش طريقة لاسترجاعها."
+                           Foreground="#94A3B8" FontSize="11" Margin="0,4,0,0" TextWrapping="Wrap" />
+
+                <TextBlock Text="تأكيد كلمة المرور:" FontWeight="SemiBold" Foreground="#3F5A73" Margin="0,12,0,4" />
+                <PasswordBox PasswordChanged="TxtConfirm_PasswordChanged" Height="36" FontSize="14" />
+
+                <Border Height="1" Background="#E2E8F0" Margin="0,18,0,14" />
+
+                <CheckBox IsChecked="{Binding LoadDemoData}" Content="تحميل بيانات تجريبية (أصناف وعملاء ومورد) للتجربة فقط" FontWeight="SemiBold" Foreground="#3F5A73" />
+                <TextBlock Text="سيبها فاضية لو هتستخدم البرنامج فعلياً. البيانات التجريبية مش مناسبة للتشغيل الحقيقي."
+                           Foreground="#94A3B8" FontSize="11" Margin="22,4,0,0" TextWrapping="Wrap" />
+
+                <TextBlock Text="{Binding ErrorMessage}" Foreground="#DC2626" FontWeight="SemiBold" Margin="0,14,0,0" TextWrapping="Wrap" />
+
+                <Button Content="إتمام الإعداد" Command="{Binding CompleteCommand}" Margin="0,16,0,0" Padding="20,10"
+                        Style="{StaticResource PosActionButton}" Background="#0083CB" Foreground="White" />
+            </StackPanel>
+        </ScrollViewer>
+    </Border>
+</Window>

@@ -1,0 +1,130 @@
+<Window x:Class="ePrescriptions.App.Views.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="e_prescriptions - تسجيل الدخول وقفل الشاشة"
+        Icon="pack://application:,,,/Resources/app.ico"
+        Width="440" Height="520"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        FlowDirection="RightToLeft"
+        FontFamily="{StaticResource AppFontFamily}">
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </Window.Resources>
+
+    <!-- استخدام حدود وتدرجات خفيفة لتوافق Windows 7 التام -->
+    <Border Background="White" CornerRadius="16" BorderBrush="#CBD5E1" BorderThickness="1"
+            MouseLeftButtonDown="Border_MouseLeftButtonDown">
+
+        <Grid Margin="24">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- زر تصغير النافذة (النافذة بدون شريط عنوان، تتحرك بالسحب من أي مكان فاضي) -->
+            <Button Grid.RowSpan="3" Content="&#x2014;" Click="Minimize_Click" ToolTip="تصغير"
+                    HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-14,-14,0,0"
+                    Width="30" Height="26" Background="Transparent" BorderThickness="0"
+                    Foreground="#64748B" FontWeight="Bold" Cursor="Hand" Panel.ZIndex="10" />
+
+            <!-- 1) شعار النظام واسم الصيدلية -->
+            <StackPanel Grid.Row="0" HorizontalAlignment="Center" Margin="0,10,0,20">
+                <Border Background="#0083CB" CornerRadius="16" Width="56" Height="56" HorizontalAlignment="Center" Margin="0,0,0,12">
+                    <Path Data="{StaticResource IconCapsule}" Fill="White" Width="32" Height="32" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Border>
+                <TextBlock Text="e_prescriptions" FontWeight="Bold" FontSize="22" Foreground="#0A4C86" HorizontalAlignment="Center" />
+                <TextBlock Text="{Binding PharmacyName}" FontWeight="SemiBold" FontSize="14" Foreground="#0083CB" HorizontalAlignment="Center" Margin="0,2,0,0" />
+            </StackPanel>
+
+            <!-- 2) حقول الإدخال ورسائل الحالة -->
+            <StackPanel Grid.Row="1" VerticalAlignment="Center">
+                <StackPanel.Style>
+                    <Style TargetType="StackPanel">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsForcedPasswordChange}" Value="True">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+                <!-- حالة قفل الشاشة -->
+                <Border Background="#FEF3C7" BorderBrush="#FCD34D" BorderThickness="1" CornerRadius="8" Padding="10" Margin="0,0,0,14"
+                        Visibility="{Binding IsLockMode, Converter={x:Null}}">
+                    <StackPanel>
+                        <TextBlock Text="الشاشة مقفلة لحماية نقطة البيع" FontWeight="Bold" Foreground="#92400E" HorizontalAlignment="Center" />
+                        <TextBlock Text="{Binding CurrentUserDisplay}" FontWeight="SemiBold" Foreground="#78350F" HorizontalAlignment="Center" Margin="0,2,0,0" />
+                    </StackPanel>
+                </Border>
+
+                <!-- اسم المستخدم (يختفي في وضع القفل) -->
+                <StackPanel Visibility="{Binding IsLockMode, Converter={x:Null}}" Margin="0,0,0,12">
+                    <TextBlock Text="اسم المستخدم:" FontWeight="SemiBold" Foreground="#3F5A73" Margin="0,0,0,4" />
+                    <TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource AppTextBox}" Height="40" FontSize="14" />
+                </StackPanel>
+
+                <!-- كلمة المرور -->
+                <StackPanel Margin="0,0,0,14">
+                    <TextBlock Text="كلمة المرور:" FontWeight="SemiBold" Foreground="#3F5A73" Margin="0,0,0,4" />
+                    <PasswordBox x:Name="TxtPassword" PasswordChanged="TxtPassword_PasswordChanged" Height="40" FontSize="16"
+                                 BorderBrush="#CBD5E1" BorderThickness="1" Padding="8,4" VerticalContentAlignment="Center" Background="#F8FAFC" />
+                </StackPanel>
+
+                <!-- رسالة الخطأ إن وجدت -->
+                <TextBlock Text="{Binding LoginErrorMessage}" Foreground="#DC2626" FontWeight="SemiBold" FontSize="12" HorizontalAlignment="Center" Margin="0,0,0,12" TextWrapping="Wrap" />
+
+                <!-- زر تسجيل الدخول أو فك القفل -->
+                <Button Command="{Binding SubmitCommand}" Style="{StaticResource PosActionButton}" Background="#0083CB" Height="44" Margin="0,0,0,10">
+                    <TextBlock Text="دخول النظام" FontWeight="Bold" FontSize="15" />
+                </Button>
+
+                <!-- زر تبديل المستخدم في وضع القفل -->
+                <Button Command="{Binding SwitchUserCommand}" Style="{StaticResource PosSecondaryButton}" Height="36"
+                        Visibility="{Binding IsLockMode, Converter={x:Null}}">
+                    <TextBlock Text="تسجيل الدخول بمستخدم آخر" FontSize="12" Foreground="#3F5A73" />
+                </Button>
+            </StackPanel>
+
+            <!-- 2.5) تغيير كلمة المرور الإجباري (دخل بكلمة مرور افتراضية): مفيش تجاوز، الخروج الوحيد يقفل البرنامج -->
+            <StackPanel Grid.Row="1" VerticalAlignment="Center"
+                        Visibility="{Binding IsForcedPasswordChange, Converter={StaticResource BoolToVis}}">
+                <Border Background="#FEE2E2" BorderBrush="#FCA5A5" BorderThickness="1" CornerRadius="8" Padding="10" Margin="0,0,0,14">
+                    <StackPanel>
+                        <TextBlock Text="لازم تغيّر كلمة المرور الافتراضية" FontWeight="Bold" Foreground="#991B1B" HorizontalAlignment="Center" />
+                        <TextBlock Text="كلمة المرور الحالية معروفة للجميع. اختر كلمة جديدة (8 أحرف على الأقل) للمتابعة."
+                                   Foreground="#7F1D1D" FontSize="12" TextWrapping="Wrap" TextAlignment="Center" Margin="0,4,0,0" />
+                    </StackPanel>
+                </Border>
+
+                <TextBlock Text="كلمة المرور الجديدة:" FontWeight="SemiBold" Foreground="#3F5A73" Margin="0,0,0,4" />
+                <PasswordBox PasswordChanged="TxtNewPassword_PasswordChanged" Height="40" FontSize="16"
+                             BorderBrush="#CBD5E1" BorderThickness="1" Padding="8,4" VerticalContentAlignment="Center" Background="#F8FAFC" />
+
+                <TextBlock Text="تأكيد كلمة المرور الجديدة:" FontWeight="SemiBold" Foreground="#3F5A73" Margin="0,12,0,4" />
+                <PasswordBox PasswordChanged="TxtConfirmNewPassword_PasswordChanged" Height="40" FontSize="16"
+                             BorderBrush="#CBD5E1" BorderThickness="1" Padding="8,4" VerticalContentAlignment="Center" Background="#F8FAFC" />
+
+                <TextBlock Text="{Binding LoginErrorMessage}" Foreground="#DC2626" FontWeight="SemiBold" FontSize="12"
+                           HorizontalAlignment="Center" Margin="0,12,0,12" TextWrapping="Wrap" />
+
+                <Button Command="{Binding SubmitCommand}" Style="{StaticResource PosActionButton}" Background="#0083CB" Height="44">
+                    <TextBlock Text="حفظ كلمة المرور الجديدة" FontWeight="Bold" FontSize="15" />
+                </Button>
+            </StackPanel>
+
+            <!-- 3) زر الخروج السفلي + الفوتر تحت خالص -->
+            <StackPanel Grid.Row="2" Margin="0,10,0,0">
+                <Button Command="{Binding ExitAppCommand}" Background="Transparent" BorderThickness="0" Cursor="Hand" Padding="8,4" HorizontalAlignment="Center">
+                    <TextBlock Text="إغلاق البرنامج بالكامل" Foreground="#94A3B8" FontSize="11" />
+                </Button>
+                <TextBlock Text="E-Prescriptions by Maged Fayez | (C) all rights reserved" FlowDirection="LeftToRight" Foreground="#64748B" FontSize="11"
+                           HorizontalAlignment="Center" Margin="0,6,0,0" />
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

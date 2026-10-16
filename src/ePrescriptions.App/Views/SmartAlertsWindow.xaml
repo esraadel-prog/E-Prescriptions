@@ -1,0 +1,132 @@
+<Window x:Class="ePrescriptions.App.Views.SmartAlertsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="e_prescriptions - التنبيهات الذكية للنظام"
+        Icon="pack://application:,,,/Resources/app.ico"
+        Width="920" Height="620"
+        WindowStartupLocation="CenterScreen"
+        FlowDirection="RightToLeft"
+        FontFamily="{StaticResource AppFontFamily}"
+        Background="#F8FAFC">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- 1) شريط الرأس -->
+        <Border Grid.Row="0" Background="{StaticResource HeaderGradient}" Padding="20,16">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="التنبيهات الذكية للنظام" Foreground="White" FontSize="18" FontWeight="Bold" />
+                    <TextBlock Text="ملخص الأصناف القريبة من الانتهاء، النواقص بالمخزون، والعملاء المتجاوزين لحد الائتمان"
+                               Foreground="#CBD5E1" FontSize="12" Margin="0,4,0,0" />
+                </StackPanel>
+                <Border Grid.Column="1" Background="#DC2626" CornerRadius="12" Padding="12,6" VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="إجمالي التنبيهات: " Foreground="White" FontWeight="Bold" FontSize="12" />
+                        <TextBlock Text="{Binding TotalAlertsCount}" Foreground="White" FontWeight="Bold" FontSize="14" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- 2) بطاقات الإحصائيات السريعة -->
+        <Grid Grid.Row="1" Margin="20,14,20,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- بطاقة انتهاء الصلاحية -->
+            <Border Grid.Column="0" Background="#FEF2F2" BorderBrush="#FCA5A5" BorderThickness="1" CornerRadius="10" Padding="14,10" Margin="0,0,8,0">
+                <StackPanel>
+                    <TextBlock Text="أصناف قاربت الصلاحية" Foreground="#991B1B" FontSize="12" FontWeight="SemiBold" />
+                    <TextBlock Text="{Binding NearExpiryCount}" Foreground="#DC2626" FontSize="22" FontWeight="Bold" Margin="0,2,0,0" />
+                </StackPanel>
+            </Border>
+
+            <!-- بطاقة النواقص -->
+            <Border Grid.Column="1" Background="#FFFBEB" BorderBrush="#FCD34D" BorderThickness="1" CornerRadius="10" Padding="14,10" Margin="4,0,4,0">
+                <StackPanel>
+                    <TextBlock Text="أصناف تحت الحد الأدنى" Foreground="#92400E" FontSize="12" FontWeight="SemiBold" />
+                    <TextBlock Text="{Binding LowStockCount}" Foreground="#D97706" FontSize="22" FontWeight="Bold" Margin="0,2,0,0" />
+                </StackPanel>
+            </Border>
+
+            <!-- بطاقة تجاوز الائتمان -->
+            <Border Grid.Column="2" Background="#EAF6FC" BorderBrush="#8AD4F0" BorderThickness="1" CornerRadius="10" Padding="14,10" Margin="8,0,0,0">
+                <StackPanel>
+                    <TextBlock Text="عملاء تجاوزوا حد الائتمان" Foreground="#0155A5" FontSize="12" FontWeight="SemiBold" />
+                    <TextBlock Text="{Binding OverCreditLimitCount}" Foreground="#0083CB" FontSize="22" FontWeight="Bold" Margin="0,2,0,0" />
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <!-- 3) التبويبات والمحتوى التفصيلي -->
+        <TabControl Grid.Row="2" SelectedIndex="{Binding SelectedTabIndex}" Margin="20,0,20,14" Background="White" BorderBrush="#E2E8F0" BorderThickness="1">
+            <!-- تبويب 1: الصلاحية -->
+            <TabItem Header="قرب انتهاء الصلاحية" FontSize="13" FontWeight="SemiBold">
+                <DataGrid ItemsSource="{Binding NearExpiryItems}" AutoGenerateColumns="False" IsReadOnly="True"
+                          HeadersVisibility="Column" GridLinesVisibility="Horizontal" Background="White"
+                          RowHeight="34" Margin="6">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="كود الصنف" Binding="{Binding ItemCode}" Width="100" />
+                        <DataGridTextColumn Header="اسم الصنف" Binding="{Binding ItemName}" Width="*" />
+                        <DataGridTextColumn Header="رقم التشغيلة" Binding="{Binding BatchNumber}" Width="110" />
+                        <DataGridTextColumn Header="تاريخ الانتهاء" Binding="{Binding ExpiryDate}" Width="110" />
+                        <DataGridTextColumn Header="الرصيد المتبقي" Binding="{Binding RemainingUnits}" Width="90" />
+                        <DataGridTextColumn Header="الحالة" Binding="{Binding StatusText}" Width="110" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+
+            <!-- تبويب 2: النواقص -->
+            <TabItem Header="نواقص المخزون" FontSize="13" FontWeight="SemiBold">
+                <DataGrid ItemsSource="{Binding LowStockItems}" AutoGenerateColumns="False" IsReadOnly="True"
+                          HeadersVisibility="Column" GridLinesVisibility="Horizontal" Background="White"
+                          RowHeight="34" Margin="6">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="كود الصنف" Binding="{Binding ItemCode}" Width="110" />
+                        <DataGridTextColumn Header="اسم الصنف" Binding="{Binding ItemName}" Width="*" />
+                        <DataGridTextColumn Header="الرصيد الحالي" Binding="{Binding CurrentStock}" Width="110" />
+                        <DataGridTextColumn Header="الحد الأدنى" Binding="{Binding MinStockAlert}" Width="110" />
+                        <DataGridTextColumn Header="النقص" Binding="{Binding Deficit}" Width="90" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+
+            <!-- تبويب 3: تجاوز حد الائتمان -->
+            <TabItem Header="تجاوز حد الائتمان" FontSize="13" FontWeight="SemiBold">
+                <DataGrid ItemsSource="{Binding OverCreditLimitItems}" AutoGenerateColumns="False" IsReadOnly="True"
+                          HeadersVisibility="Column" GridLinesVisibility="Horizontal" Background="White"
+                          RowHeight="34" Margin="6">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="اسم العميل" Binding="{Binding CustomerName}" Width="*" />
+                        <DataGridTextColumn Header="الهاتف" Binding="{Binding Phone}" Width="120" />
+                        <DataGridTextColumn Header="الرصيد المدين (ج.م)" Binding="{Binding CurrentBalancePounds, StringFormat={}{0:N2}}" Width="130" />
+                        <DataGridTextColumn Header="حد الائتمان (ج.م)" Binding="{Binding CreditLimitPounds, StringFormat={}{0:N2}}" Width="130" />
+                        <DataGridTextColumn Header="المبلغ الزائد (ج.م)" Binding="{Binding ExcessPounds, StringFormat={}{0:N2}}" Width="130" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+        </TabControl>
+
+        <!-- 4) شريط الأزرار السفلي -->
+        <Border Grid.Row="3" Background="#F1F5F9" BorderBrush="#E2E8F0" BorderThickness="0,1,0,0" Padding="20,12">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <Button Content="المتابعة إلى نقطة البيع" Command="{Binding ContinueCommand}"
+                        Style="{StaticResource PosActionButton}" Background="#0083CB" Foreground="White"
+                        Padding="24,10" FontSize="14" FontWeight="Bold" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

@@ -1,0 +1,168 @@
+<UserControl x:Class="ePrescriptions.App.Views.CustomersView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:enums="clr-namespace:ePrescriptions.Domain.Enums;assembly=ePrescriptions.Domain"
+             FlowDirection="RightToLeft"
+             FontFamily="{StaticResource AppFontFamily}">
+
+    <Grid Background="Transparent">
+        <Border Background="White" CornerRadius="12" Margin="10">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="15" Direction="270" ShadowDepth="4" Opacity="0.12" Color="#000000" />
+            </Border.Effect>
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <!-- رأس الشاشة -->
+                <Border Grid.Row="0" Background="{StaticResource HeaderGradient}" CornerRadius="12,12,0,0" Padding="16,12">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                            <Path Data="{StaticResource IconCustomers}" Fill="#E7387D" Width="24" Height="24" Stretch="Uniform" Margin="0,0,12,0" />
+                            <TextBlock Text="إدارة حسابات العملاء والآجل والحدود الائتمانية وسندات القبض" FontSize="20" FontWeight="Bold" Foreground="White" />
+                        </StackPanel>
+                        <Button Grid.Column="1" Command="{Binding NewCustomerCommand}" Style="{StaticResource PosActionButton}" Background="#10B981" Padding="14,6">
+                            <TextBlock Text="+ عميل جديد" />
+                        </Button>
+                    </Grid>
+                </Border>
+
+                <!-- المحتوى: قائمة العملاء يميناً + التفاصيل وكشف الحساب يساراً -->
+                <Grid Grid.Row="1" Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1.2*" />
+                        <ColumnDefinition Width="2*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- قائمة العملاء -->
+                    <Border Grid.Column="0" Background="#F8FAFC" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="8" Padding="10" Margin="0,0,10,0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Text="دليل العملاء والأرصدة" FontWeight="Bold" Foreground="#0A4C86" Margin="0,0,0,8" />
+
+                            <DataGrid Grid.Row="1" ItemsSource="{Binding CustomersList}" SelectedItem="{Binding SelectedCustomer}" Style="{StaticResource AppFastDataGrid}">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="الاسم" Binding="{Binding Name}" Width="*" IsReadOnly="True" />
+                                    <DataGridTextColumn Header="موبايل" Binding="{Binding Phone}" Width="95" IsReadOnly="True" />
+                                    <DataGridTextColumn Header="المديونية (قروش)" Binding="{Binding CurrentBalancePiastres}" Width="110" IsReadOnly="True" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </Border>
+
+                    <!-- تبويبات كشف الحساب وسند القبض وتعديل البيانات -->
+                    <TabControl Grid.Column="1" Background="Transparent" BorderThickness="0">
+                        <!-- كشف حساب العميل التفصيلي -->
+                        <TabItem Header="كشف الحساب التفصيلي" FontSize="14" FontWeight="Bold" Padding="16,8">
+                            <Border Background="#F8FAFC" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="8" Padding="12" Margin="0,10,0,0">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+                                        <TextBlock Text="كشف حساب العميل: " Foreground="#64748B" FontWeight="Bold" VerticalAlignment="Center" />
+                                        <TextBlock Text="{Binding SelectedCustomer.Name, FallbackValue='(اختر عميلاً لعرض كشف حسابه)'}" FontWeight="Bold" Foreground="#0A4C86" Margin="0,0,16,0" VerticalAlignment="Center" />
+                                        <TextBlock Text="الرصيد الحالي المستحق: " Foreground="#64748B" FontWeight="Bold" VerticalAlignment="Center" />
+                                        <TextBlock Text="{Binding SelectedCustomer.CurrentBalancePiastres, StringFormat='{}{0} قرش', FallbackValue='0'}" FontWeight="Bold" Foreground="#DC2626" VerticalAlignment="Center" />
+                                        <Button Command="{Binding PrintStatementPdfCommand}" Style="{StaticResource PosSecondaryButton}" Margin="20,0,0,0" Padding="12,4" Height="30">
+                                            <TextBlock Text="طباعة كشف الحساب A4 (PDF)" FontWeight="Bold" Foreground="#0083CB" />
+                                        </Button>
+                                    </StackPanel>
+
+                                    <DataGrid Grid.Row="1" ItemsSource="{Binding StatementRows}" Style="{StaticResource AppFastDataGrid}">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="التاريخ" Binding="{Binding FormattedDate}" Width="100" IsReadOnly="True" />
+                                            <DataGridTextColumn Header="المرجع" Binding="{Binding ReferenceNumber}" Width="120" IsReadOnly="True" />
+                                            <DataGridTextColumn Header="البيان" Binding="{Binding Description}" Width="*" IsReadOnly="True" />
+                                            <DataGridTextColumn Header="مدين (فاتورة)" Binding="{Binding FormattedDebit}" Width="110" IsReadOnly="True" />
+                                            <DataGridTextColumn Header="دائن (سداد)" Binding="{Binding FormattedCredit}" Width="110" IsReadOnly="True" />
+                                            <DataGridTextColumn Header="الرصيد التراكمي" Binding="{Binding FormattedRunningBalance}" Width="120" IsReadOnly="True" />
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </Grid>
+                            </Border>
+                        </TabItem>
+
+                        <!-- إصدار سند قبض -->
+                        <TabItem Header="إصدار سند قبض (سداد)" FontSize="14" FontWeight="Bold" Padding="16,8">
+                            <Border Background="#ECFDF5" BorderBrush="#A7F3D0" BorderThickness="1" CornerRadius="8" Padding="20" Margin="0,10,0,0">
+                                <StackPanel MaxWidth="500" HorizontalAlignment="Right">
+                                    <TextBlock Text="تسجيل سند قبض نقدي أو شبكة وخصمه من الحساب" FontSize="16" FontWeight="Bold" Foreground="#065F46" Margin="0,0,0,14" />
+                                    <TextBlock Text="العميل:" Foreground="#047857" />
+                                    <TextBlock Text="{Binding SelectedCustomer.Name, FallbackValue='(اختر عميلاً من الجدول)'}" FontWeight="Bold" Foreground="#0A4C86" FontSize="15" Margin="0,2,0,10" />
+
+                                    <TextBlock Text="المبلغ المقبوض (ج.م):" Foreground="#047857" />
+                                    <TextBox Text="{Binding VoucherAmountRiyals, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource AppTextBox}" FontWeight="Bold" FontSize="16" TextAlignment="Center" Margin="0,2,0,10" />
+
+                                    <TextBlock Text="طريقة الدفع:" Foreground="#047857" />
+                                    <ComboBox SelectedValue="{Binding VoucherPaymentMethod}" SelectedValuePath="Tag" Style="{StaticResource AppComboBox}" Margin="0,2,0,10">
+                                        <ComboBoxItem Content="نقدي" Tag="{x:Static enums:PaymentMethod.Cash}" IsSelected="True" />
+                                        <ComboBoxItem Content="شبكة / كارت" Tag="{x:Static enums:PaymentMethod.Network}" />
+                                    </ComboBox>
+
+                                    <TextBlock Text="البيان / ملاحظات:" Foreground="#047857" />
+                                    <TextBox Text="{Binding VoucherNotes, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource AppTextBox}" Margin="0,2,0,16" />
+
+                                    <Button Command="{Binding ReceivePaymentCommand}" Style="{StaticResource PosActionButton}" Background="#059669">
+                                        <TextBlock Text="حفظ وتأكيد سند القبض" FontSize="14" />
+                                    </Button>
+                                </StackPanel>
+                            </Border>
+                        </TabItem>
+
+                        <!-- بيانات العميل والحد الائتماني -->
+                        <TabItem Header="بيانات العميل والحد الائتماني" FontSize="14" FontWeight="Bold" Padding="16,8">
+                            <Border Background="#F8FAFC" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="8" Padding="20" Margin="0,10,0,0">
+                                <StackPanel MaxWidth="500" HorizontalAlignment="Right">
+                                    <TextBlock Text="تعديل بيانات العميل" FontWeight="Bold" FontSize="16" Foreground="#0A4C86" Margin="0,0,0,12" />
+
+                                    <TextBlock Text="الاسم الكامل:" Foreground="#64748B" />
+                                    <TextBox Text="{Binding EditName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource AppTextBox}" Margin="0,2,0,8" />
+
+                                    <TextBlock Text="رقم الموبايل:" Foreground="#64748B" />
+                                    <TextBox Text="{Binding EditPhone, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource AppTextBox}" Margin="0,2,0,8" />
+
+                                    <TextBlock Text="الرقم القومي / الهوية:" Foreground="#64748B" />
+                                    <TextBox Text="{Binding EditNationalId, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource AppTextBox}" Margin="0,2,0,8" />
+
+                                    <TextBlock Text="الحد الائتماني الأقصى (ج.م):" Foreground="#64748B" />
+                                    <TextBox Text="{Binding EditCreditLimitRiyals, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource AppTextBox}" TextAlignment="Center" FontWeight="Bold" Margin="0,2,0,8" />
+
+                                    <TextBlock Text="فئة السعر الافتراضية:" Foreground="#64748B" />
+                                    <ComboBox SelectedValue="{Binding EditCategory}" SelectedValuePath="Tag" Style="{StaticResource AppComboBox}" Margin="0,2,0,8">
+                                        <ComboBoxItem Content="قطاعي (Retail)" Tag="{x:Static enums:PriceCategory.Retail}" IsSelected="True" />
+                                        <ComboBoxItem Content="جملة (Wholesale)" Tag="{x:Static enums:PriceCategory.Wholesale}" />
+                                    </ComboBox>
+
+                                    <TextBlock Text="ملاحظات العميل:" Foreground="#64748B" />
+                                    <TextBox Text="{Binding EditNotes, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource AppTextBox}" Margin="0,2,0,14" />
+
+                                    <Button Command="{Binding SaveCustomerCommand}" Style="{StaticResource PosActionButton}" Background="#0083CB">
+                                        <TextBlock Text="حفظ بيانات العميل" FontSize="14" />
+                                    </Button>
+                                </StackPanel>
+                            </Border>
+                        </TabItem>
+                    </TabControl>
+                </Grid>
+
+                <!-- شريط الحالة السفلي -->
+                <Border Grid.Row="2" Background="#0155A5" CornerRadius="0,0,12,12" Padding="14,8">
+                    <TextBlock Text="{Binding StatusMessage}" Foreground="#38BDF8" FontWeight="SemiBold" FontSize="13" />
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

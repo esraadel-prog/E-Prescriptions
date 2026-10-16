@@ -1,0 +1,269 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Fonts.xaml" />
+        <ResourceDictionary Source="Icons.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <!-- الألوان الأساسية مأخوذة من ألوان أيقونة البرنامج: أزرق + فوشيا + أخضر -->
+    <Color x:Key="ColorPrimaryNavy">#0A4C86</Color>
+    <Color x:Key="ColorSecondaryPurple">#D3277B</Color>
+    <Color x:Key="ColorAccentBlue">#0083CB</Color>
+    <Color x:Key="ColorAccentCyan">#02ABE1</Color>
+    <Color x:Key="ColorAccentMagenta">#D3277B</Color>
+    <Color x:Key="ColorAccentGreen">#32992B</Color>
+    <Color x:Key="ColorAccentLime">#7BB82D</Color>
+    <Color x:Key="ColorSuccessGreen">#32992B</Color>
+    <Color x:Key="ColorWarningAmber">#F59E0B</Color>
+    <Color x:Key="ColorDangerRed">#DC2626</Color>
+    <Color x:Key="ColorSurfaceWhite">#FFFFFF</Color>
+    <Color x:Key="ColorSurfaceLight">#F4F9FC</Color>
+    <Color x:Key="ColorBorder">#D5E4EE</Color>
+    <Color x:Key="ColorTextDark">#0B2A45</Color>
+    <Color x:Key="ColorTextMuted">#5B7389</Color>
+
+    <SolidColorBrush x:Key="BrushPrimaryNavy" Color="{StaticResource ColorPrimaryNavy}" />
+    <SolidColorBrush x:Key="BrushSecondaryPurple" Color="{StaticResource ColorSecondaryPurple}" />
+    <SolidColorBrush x:Key="BrushAccentBlue" Color="{StaticResource ColorAccentBlue}" />
+    <SolidColorBrush x:Key="BrushAccentCyan" Color="{StaticResource ColorAccentCyan}" />
+    <SolidColorBrush x:Key="BrushAccentMagenta" Color="{StaticResource ColorAccentMagenta}" />
+    <SolidColorBrush x:Key="BrushAccentGreen" Color="{StaticResource ColorAccentGreen}" />
+    <SolidColorBrush x:Key="BrushAccentLime" Color="{StaticResource ColorAccentLime}" />
+    <SolidColorBrush x:Key="BrushSuccessGreen" Color="{StaticResource ColorSuccessGreen}" />
+    <SolidColorBrush x:Key="BrushWarningAmber" Color="{StaticResource ColorWarningAmber}" />
+    <SolidColorBrush x:Key="BrushDangerRed" Color="{StaticResource ColorDangerRed}" />
+    <SolidColorBrush x:Key="BrushSurfaceWhite" Color="{StaticResource ColorSurfaceWhite}" />
+    <SolidColorBrush x:Key="BrushSurfaceLight" Color="{StaticResource ColorSurfaceLight}" />
+    <SolidColorBrush x:Key="BrushBorder" Color="{StaticResource ColorBorder}" />
+    <SolidColorBrush x:Key="BrushTextDark" Color="{StaticResource ColorTextDark}" />
+    <SolidColorBrush x:Key="BrushTextMuted" Color="{StaticResource ColorTextMuted}" />
+
+    <!-- خلفية التطبيق: فاتحة بلمسة زرقاء/خضراء خفيفة من الأيقونة -->
+    <LinearGradientBrush x:Key="AppBackgroundGradient" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#E8F4FB" Offset="0" />
+        <GradientStop Color="#F4F9FC" Offset="0.55" />
+        <GradientStop Color="#ECF6EA" Offset="1" />
+    </LinearGradientBrush>
+
+    <!-- تدرج رأس الفواتير والشاشات: أزرق الأيقونة -->
+    <LinearGradientBrush x:Key="HeaderGradient" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#0155A5" Offset="0" />
+        <GradientStop Color="#0083CB" Offset="0.65" />
+        <GradientStop Color="#02ABE1" Offset="1" />
+    </LinearGradientBrush>
+
+    <!-- شريط ملوّن رفيع بألوان الأيقونة الثلاثة (أزرق - أخضر - فوشيا) -->
+    <LinearGradientBrush x:Key="BrandStripeGradient" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#0083CB" Offset="0" />
+        <GradientStop Color="#7BB82D" Offset="0.5" />
+        <GradientStop Color="#D3277B" Offset="1" />
+    </LinearGradientBrush>
+
+    <!-- لون التحديد في الجداول والقوائم (أزرق فاتح بنص غامق واضح) -->
+    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#BFE3F5" />
+    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="#0B2A45" />
+    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="#DCEFF9" />
+    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="#0B2A45" />
+
+    <!-- ستايل النصوص الافتراضي -->
+    <Style TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource AppFontFamily}" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}" />
+        <Setter Property="Foreground" Value="{StaticResource BrushTextDark}" />
+    </Style>
+
+    <!-- ستايل حقول الإدخال TextBox مع إطار تركيز واضح وبدون DropShadow متكرر -->
+    <Style x:Key="AppTextBox" TargetType="TextBox">
+        <Setter Property="FontFamily" Value="{StaticResource AppFontFamily}" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}" />
+        <Setter Property="Padding" Value="8,5" />
+        <Setter Property="Background" Value="{StaticResource BrushSurfaceWhite}" />
+        <Setter Property="Foreground" Value="{StaticResource BrushTextDark}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BrushBorder}" />
+        <Setter Property="BorderThickness" Value="1.5" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBox">
+                    <Border x:Name="border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="6">
+                        <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsFocused" Value="true">
+                            <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource BrushAccentBlue}" />
+                            <Setter TargetName="border" Property="Background" Value="#F4FAFE" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter TargetName="border" Property="Background" Value="#EDF3F7" />
+                            <Setter Property="Foreground" Value="{StaticResource BrushTextMuted}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ستايل القوائم المنسدلة ComboBox -->
+    <Style x:Key="AppComboBox" TargetType="ComboBox">
+        <Setter Property="FontFamily" Value="{StaticResource AppFontFamily}" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}" />
+        <Setter Property="Padding" Value="8,4" />
+        <Setter Property="Height" Value="32" />
+        <Setter Property="Background" Value="{StaticResource BrushSurfaceWhite}" />
+        <Setter Property="Foreground" Value="{StaticResource BrushTextDark}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BrushBorder}" />
+        <Setter Property="BorderThickness" Value="1.5" />
+    </Style>
+
+    <!-- أزرار الاختصارات الوظيفية (F1, F2, F3...) -->
+    <Style x:Key="PosActionButton" TargetType="Button">
+        <Setter Property="FontFamily" Value="{StaticResource AppFontFamily}" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Background" Value="#0083CB" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="10,6" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="btnBorder"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="6"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="btnBorder" Property="Opacity" Value="0.9" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="btnBorder" Property="Opacity" Value="0.75" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- زر ثانوي للأفعال المساندة -->
+    <Style x:Key="PosSecondaryButton" TargetType="Button">
+        <Setter Property="FontFamily" Value="{StaticResource AppFontFamily}" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="#0A4C86" />
+        <Setter Property="Background" Value="#EAF4FA" />
+        <Setter Property="BorderBrush" Value="#B9D6E8" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Padding" Value="10,5" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="btnBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="6"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="btnBorder" Property="Background" Value="#D3E9F6" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="btnBorder" Property="Background" Value="#B9DDF1" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- زر الشريط الجانبي للتنقل بين الوحدات (تبويبات التقارير تستخدمه أيضاً)
+         ملاحظة: ستايل TextBlock الافتراضي كان يفرض لوناً غامقاً على النص داخل الأزرار فلا يظهر،
+         لذلك ربطنا لون أي TextBlock داخل الزر بلون الزر نفسه (يتغير مع الـ Hover والتحديد). -->
+    <Style x:Key="SidebarNavButton" TargetType="RadioButton">
+        <Style.Resources>
+            <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                <Setter Property="Foreground"
+                        Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" />
+            </Style>
+        </Style.Resources>
+        <Setter Property="FontFamily" Value="{StaticResource AppFontFamily}" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}" />
+        <Setter Property="FontWeight" Value="Medium" />
+        <Setter Property="Foreground" Value="#0B3556" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Margin" Value="4,2" />
+        <Setter Property="Padding" Value="10,6" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Border x:Name="navBorder"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="6"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="navBorder" Property="Background" Value="#EAF5FB" />
+                            <Setter Property="Foreground" Value="#0155A5" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="navBorder" Property="Background" Value="#CFE8F7" />
+                            <Setter Property="Foreground" Value="#0155A5" />
+                            <Setter Property="FontWeight" Value="Bold" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ستايل DataGrid خفيف وعالي الأداء بدون تأثيرات ضبابية أو ظلال تثقل النظام القديم -->
+    <Style x:Key="AppFastDataGrid" TargetType="DataGrid">
+        <Setter Property="EnableRowVirtualization" Value="True" />
+        <Setter Property="EnableColumnVirtualization" Value="True" />
+        <Setter Property="VirtualizingPanel.IsVirtualizing" Value="True" />
+        <Setter Property="VirtualizingPanel.VirtualizationMode" Value="Recycling" />
+        <Setter Property="ScrollViewer.CanContentScroll" Value="True" />
+        <Setter Property="FontFamily" Value="{StaticResource AppFontFamily}" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}" />
+        <Setter Property="Background" Value="{StaticResource BrushSurfaceWhite}" />
+        <Setter Property="RowBackground" Value="{StaticResource BrushSurfaceWhite}" />
+        <Setter Property="AlternatingRowBackground" Value="#F4FAFD" />
+        <Setter Property="GridLinesVisibility" Value="Horizontal" />
+        <Setter Property="HorizontalGridLinesBrush" Value="{StaticResource BrushBorder}" />
+        <Setter Property="HeadersVisibility" Value="Column" />
+        <Setter Property="RowHeight" Value="34" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="{StaticResource BrushBorder}" />
+        <Setter Property="AutoGenerateColumns" Value="False" />
+        <Setter Property="CanUserAddRows" Value="False" />
+        <Setter Property="CanUserDeleteRows" Value="False" />
+        <Setter Property="CanUserResizeRows" Value="False" />
+    </Style>
+
+    <!-- ستايل رأس العمود في DataGrid -->
+    <Style TargetType="DataGridColumnHeader">
+        <Setter Property="FontFamily" Value="{StaticResource AppFontFamily}" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}" />
+        <Setter Property="Foreground" Value="{StaticResource BrushPrimaryNavy}" />
+        <Setter Property="Background" Value="#E3F1F9" />
+        <Setter Property="Padding" Value="8,6" />
+        <Setter Property="BorderThickness" Value="0,0,1,2" />
+        <Setter Property="BorderBrush" Value="{StaticResource BrushBorder}" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+    </Style>
+
+</ResourceDictionary>

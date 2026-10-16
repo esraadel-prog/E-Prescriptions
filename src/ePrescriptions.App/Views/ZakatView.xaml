@@ -1,0 +1,170 @@
+<UserControl x:Class="ePrescriptions.App.Views.ZakatView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             FlowDirection="RightToLeft"
+             FontFamily="{StaticResource AppFontFamily}">
+
+    <Grid Background="Transparent">
+        <Border Background="White" CornerRadius="12" Margin="10">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="15" Direction="270" ShadowDepth="4" Opacity="0.12" Color="#000000" />
+            </Border.Effect>
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <!-- رأس الشاشة -->
+                    <RowDefinition Height="Auto" />
+                    <!-- المحتوى الرئيسي -->
+                    <RowDefinition Height="*" />
+                    <!-- شريط الحالة -->
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <!-- رأس الشاشة -->
+                <Border Grid.Row="0" Background="{StaticResource HeaderGradient}" CornerRadius="12,12,0,0" Padding="16,12">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                            <Path Data="{StaticResource IconZakat}" Fill="#7BB82D" Width="24" Height="24" Stretch="Uniform" Margin="0,0,12,0" />
+                            <TextBlock Text="حاسبة الزكاة الشرعية للصيدلية (عروض التجارة ونصاب 85 جم ذهب)" FontSize="20" FontWeight="Bold" Foreground="White" />
+                        </StackPanel>
+                        <Button Grid.Column="1" Command="{Binding RecalculateCommand}" Style="{StaticResource PosActionButton}" Background="#059669" Padding="14,6">
+                            <TextBlock Text="إعادة احتساب الزكاة" />
+                        </Button>
+                    </Grid>
+                </Border>
+
+                <!-- المحتوى الرئيسي -->
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="20">
+                    <StackPanel MaxWidth="850" HorizontalAlignment="Center">
+                        <!-- خيارات الاحتساب وسعر الذهب -->
+                        <Border Background="#F8FAFC" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="10" Padding="16" Margin="0,0,0,16">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1.5*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <!-- سعر جرام الذهب عيار 24 -->
+                                <StackPanel Grid.Column="0" Margin="4">
+                                    <TextBlock Text="سعر جرام الذهب عيار 24 (ج.م):" Foreground="#3F5A73" FontWeight="Bold" Margin="0,0,0,4" />
+                                    <TextBox Text="{Binding GoldGramPricePounds, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" Style="{StaticResource AppTextBox}" FontSize="16" FontWeight="Bold" TextAlignment="Center" />
+                                    <Button Content="حفظ السعر" Command="{Binding SaveGoldPriceCommand}" Style="{StaticResource PosSecondaryButton}" Margin="0,6,0,0" Padding="12,4" Height="30" />
+                                    <TextBlock Text="{Binding SavedGoldPriceInfo}" Foreground="#64748B" FontSize="11" TextWrapping="Wrap" Margin="0,4,0,0" />
+                                </StackPanel>
+
+                                <!-- تقييم المخزون -->
+                                <StackPanel Grid.Column="1" Margin="4">
+                                    <TextBlock Text="تقييم عروض التجارة:" Foreground="#3F5A73" FontWeight="Bold" Margin="0,0,0,4" />
+                                    <ComboBox SelectedValue="{Binding EvaluateAtCost}" SelectedValuePath="Tag" Style="{StaticResource AppComboBox}">
+                                        <ComboBoxItem Content="بسعر التكلفة (الأحوط)" Tag="{x:Static sys:Boolean.TrueString}" IsSelected="True" xmlns:sys="clr-namespace:System;assembly=mscorlib" />
+                                        <ComboBoxItem Content="بسعر البيع القطاعي" Tag="{x:Static sys:Boolean.FalseString}" xmlns:sys="clr-namespace:System;assembly=mscorlib" />
+                                    </ComboBox>
+                                </StackPanel>
+
+                                <!-- نوع الحول -->
+                                <StackPanel Grid.Column="2" Margin="4">
+                                    <TextBlock Text="نوع الحول:" Foreground="#3F5A73" FontWeight="Bold" Margin="0,0,0,4" />
+                                    <ComboBox SelectedValue="{Binding IsHijriYear}" SelectedValuePath="Tag" Style="{StaticResource AppComboBox}">
+                                        <ComboBoxItem Content="حول هجري (2.5%)" Tag="{x:Static sys:Boolean.TrueString}" IsSelected="True" xmlns:sys="clr-namespace:System;assembly=mscorlib" />
+                                        <ComboBoxItem Content="حول ميلادي (2.577%)" Tag="{x:Static sys:Boolean.FalseString}" xmlns:sys="clr-namespace:System;assembly=mscorlib" />
+                                    </ComboBox>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- بطاقات عناصر وعاء الزكاة -->
+                        <TextBlock Text="مكونات وعاء الزكاة الشرعي:" FontWeight="Bold" FontSize="15" Foreground="#0A4C86" Margin="0,0,0,10" />
+                        <Grid Margin="0,0,0,16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Border Grid.Column="0" Background="White" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="8" Padding="12" Margin="0,0,4,0">
+                                <StackPanel HorizontalAlignment="Center">
+                                    <TextBlock Text="1) قيمة المخزون الدوائي" FontSize="11" Foreground="#64748B" />
+                                    <TextBlock Text="{Binding FormattedStockValue}" FontSize="15" FontWeight="Bold" Foreground="#0B2A45" Margin="0,4,0,0" />
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Column="1" Background="White" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="8" Padding="12" Margin="4,0">
+                                <StackPanel HorizontalAlignment="Center">
+                                    <TextBlock Text="2) النقد بالصندوق والبنك" FontSize="11" Foreground="#64748B" />
+                                    <TextBlock Text="{Binding FormattedCashAndBank}" FontSize="15" FontWeight="Bold" Foreground="#10B981" Margin="0,4,0,0" />
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Column="2" Background="White" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="8" Padding="12" Margin="4,0">
+                                <StackPanel HorizontalAlignment="Center">
+                                    <TextBlock Text="3) ديون مرجوة (على العملاء)" FontSize="11" Foreground="#64748B" />
+                                    <TextBlock Text="{Binding FormattedReceivables}" FontSize="15" FontWeight="Bold" Foreground="#0083CB" Margin="0,4,0,0" />
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Column="3" Background="#FEF2F2" BorderBrush="#FECACA" BorderThickness="1" CornerRadius="8" Padding="12" Margin="4,0,0,0">
+                                <StackPanel HorizontalAlignment="Center">
+                                    <TextBlock Text="يُطرح: التزامات حالة للموردين" FontSize="11" Foreground="#991B1B" />
+                                    <TextBlock Text="{Binding FormattedPayables}" FontSize="15" FontWeight="Bold" Foreground="#DC2626" Margin="0,4,0,0" />
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+
+                        <!-- مقارنة الوعاء بالنصاب -->
+                        <Grid Margin="0,0,0,16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Border Grid.Column="0" Background="#F1F5F9" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="8" Padding="16" Margin="0,0,6,0">
+                                <StackPanel HorizontalAlignment="Center">
+                                    <TextBlock Text="صافي وعاء الزكاة المحسوب:" FontWeight="Bold" FontSize="13" Foreground="#3F5A73" />
+                                    <TextBlock Text="{Binding FormattedZakatBase}" FontWeight="Bold" FontSize="20" Foreground="#0A4C86" Margin="0,4,0,0" />
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Column="1" Background="#FEF3C7" BorderBrush="#FCD34D" BorderThickness="1" CornerRadius="8" Padding="16" Margin="6,0,0,0">
+                                <StackPanel HorizontalAlignment="Center">
+                                    <TextBlock Text="نصاب الذهب الشرعي (قيمة 85 جم):" FontWeight="Bold" FontSize="13" Foreground="#92400E" />
+                                    <TextBlock Text="{Binding FormattedNisab}" FontWeight="Bold" FontSize="20" Foreground="#B45309" Margin="0,4,0,0" />
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+
+                        <!-- النتيجة ومقدار الزكاة الواجبة -->
+                        <Border Background="#0A4C86" CornerRadius="12" Padding="24" Margin="0,0,0,10">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                    <TextBlock Text="حالة الزكاة:" Foreground="#94A3B8" FontSize="13" />
+                                    <TextBlock Text="{Binding ZakatStatusText}" Foreground="#38BDF8" FontWeight="Bold" FontSize="17" Margin="0,2,0,0" />
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                                    <TextBlock Text="مقدار الزكاة الواجب إخراجها:" Foreground="#38BDF8" FontSize="13" HorizontalAlignment="Center" />
+                                    <TextBlock Text="{Binding FormattedZakatDue}" Foreground="White" FontWeight="Bold" FontSize="30" HorizontalAlignment="Center" Margin="0,2,0,0" />
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+
+                <!-- شريط الحالة -->
+                <Border Grid.Row="2" Background="#0155A5" CornerRadius="0,0,12,12" Padding="14,8">
+                    <TextBlock Text="{Binding StatusMessage}" Foreground="#38BDF8" FontWeight="SemiBold" FontSize="13" />
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

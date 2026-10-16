@@ -1,0 +1,79 @@
+<UserControl x:Class="ePrescriptions.App.Views.HelpView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             FlowDirection="RightToLeft"
+             FontFamily="{StaticResource AppFontFamily}">
+
+    <Grid Margin="14">
+        <Grid.RowDefinitions>
+            <!-- 1) ترويسة الشاشة -->
+            <RowDefinition Height="Auto" />
+            <!-- 2) المحتوى الرئيسي القابل للتمرير -->
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- 1) ترويسة الشاشة -->
+        <Border Grid.Row="0" Background="White" CornerRadius="12" Padding="16,12" Margin="0,0,0,12" BorderBrush="#E2E8F0" BorderThickness="1">
+            <StackPanel>
+                <TextBlock Text="دليل التشغيل والاختصارات السريعة" FontSize="18" FontWeight="Bold" Foreground="#0A4C86" />
+                <TextBlock Text="نظام e_prescriptions لإدارة الصيدليات - مصمم للسرعة الفائقة والعمل المحلي الكامل بدون إنترنت" Foreground="#64748B" FontSize="12" Margin="0,2,0,0" />
+            </StackPanel>
+        </Border>
+
+        <!-- 2) المحتوى -->
+        <Border Grid.Row="1" Background="White" CornerRadius="12" BorderBrush="#E2E8F0" BorderThickness="1" Padding="16">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel MaxWidth="900" HorizontalAlignment="Left">
+
+                    <!-- قسم 1: جدول اختصارات لوحة المفاتيح -->
+                    <Border Background="#F8FAFC" BorderBrush="#CBD5E1" BorderThickness="1" CornerRadius="10" Padding="16" Margin="0,0,0,16">
+                        <StackPanel>
+                            <TextBlock Text="اختصارات لوحة المفاتيح السريعة (Keyboard Shortcuts)" FontWeight="Bold" FontSize="15" Foreground="#0A4C86" Margin="0,0,0,10" />
+                            <TextBlock Text="تمت برمجة البرنامج لتمكين الكاشير والصيدلي من إدارة عمليات البيع بالكامل عبر لوحة المفاتيح بدون الحاجة لاستخدام الماوس:" Foreground="#3F5A73" FontSize="12" Margin="0,0,0,12" />
+
+                            <DataGrid ItemsSource="{Binding Shortcuts}" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True"
+                                      BorderBrush="#E2E8F0" BorderThickness="1" RowHeight="36" AlternatingRowBackground="#F1F5F9">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="المفتاح" Binding="{Binding Key}" Width="90" FontWeight="Bold" Foreground="#0083CB" />
+                                    <DataGridTextColumn Header="الوظيفة" Binding="{Binding Action}" Width="150" FontWeight="SemiBold" Foreground="#0B2A45" />
+                                    <DataGridTextColumn Header="الشرح والتفاصيل" Binding="{Binding Description}" Width="*" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- قسم 2: كيفية عمل نظام FEFO (First Expire First Out) -->
+                    <Border Background="#FEF3C7" BorderBrush="#FCD34D" BorderThickness="1" CornerRadius="10" Padding="16" Margin="0,0,0,16">
+                        <StackPanel>
+                            <TextBlock Text="نظام الصرف الذكي بالأقرب صلاحية (FEFO)" FontWeight="Bold" FontSize="15" Foreground="#92400E" Margin="0,0,0,8" />
+                            <TextBlock Text="• عند إضافة صنف إلى فاتورة المبيعات، يبحث النظام تلقائياً عن التشغيلة (Batch) الأقرب تاريخ انتهاء، ويخصم منها أولاً." Foreground="#78350F" FontSize="13" Margin="0,2" />
+                            <TextBlock Text="• إذا كانت الكمية المطلوبة أكبر من المتبقي في التشغيلة الأولى، يقوم النظام بتجزئة الخصم وخصم المتبقي من التشغيلة التي تليها فوراً." Foreground="#78350F" FontSize="13" Margin="0,2" />
+                            <TextBlock Text="• يمنع النظام تراكم الأدوية القديمة أو بيع أدوية منتهية الصلاحية دون تنبيه واضح." Foreground="#78350F" FontSize="13" Margin="0,2" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- قسم 3: التجزئة الثلاثية (علبة / شريط / قرص) -->
+                    <Border Background="#EAF6FC" BorderBrush="#CBEAF8" BorderThickness="1" CornerRadius="10" Padding="16" Margin="0,0,0,16">
+                        <StackPanel>
+                            <TextBlock Text="معاملات التجزئة الثلاثية والوحدات الصغرى" FontWeight="Bold" FontSize="15" Foreground="#0155A5" Margin="0,0,0,8" />
+                            <TextBlock Text="• يدعم النظام تعريف عدد الأشرطة في العلبة، وعدد الأقراص في الشريط الواحد لكل دواء." Foreground="#0155A5" FontSize="13" Margin="0,2" />
+                            <TextBlock Text="• يتم احتساب سعر الشريط وسعر القرص تلقائياً بدقة متناهية مع تقريب النصف للأعلى بالقرش (Half-Up)." Foreground="#0155A5" FontSize="13" Margin="0,2" />
+                            <TextBlock Text="• يتم تخزين المخزون الحقيقي دائماً بالوحدة الصغرى (قرص/أمبول)، مما يمنع حدوث أي فروقات أو عجز في الجرد." Foreground="#0155A5" FontSize="13" Margin="0,2" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- قسم 4: التوافق والأمان والنسخ الاحتياطي -->
+                    <Border Background="#F0FDF4" BorderBrush="#BBF7D0" BorderThickness="1" CornerRadius="10" Padding="16">
+                        <StackPanel>
+                            <TextBlock Text="العمل بدون إنترنت والأمان المحلي" FontWeight="Bold" FontSize="15" Foreground="#166534" Margin="0,0,0,8" />
+                            <TextBlock Text="• البرنامج يعمل محلياً 100% بدون أي حاجة للاتصال بالإنترنت، متوافق مع كافة إصدارات ويندوز من Windows 7 SP1 إلى Windows 11." Foreground="#14532D" FontSize="13" Margin="0,2" />
+                            <TextBlock Text="• يتم تخزين كلمات المرور بتشفير PBKDF2 المعتمد دولياً مع Salt عشوائي لمنع الاختراق." Foreground="#14532D" FontSize="13" Margin="0,2" />
+                            <TextBlock Text="• جميع العمليات المحاسبية تسجل داخل Transaction ذرية موحدة لحماية قاعدة البيانات من الانقطاع المفاجئ للكهرباء." Foreground="#14532D" FontSize="13" Margin="0,2" />
+                        </StackPanel>
+                    </Border>
+
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+    </Grid>
+</UserControl>
