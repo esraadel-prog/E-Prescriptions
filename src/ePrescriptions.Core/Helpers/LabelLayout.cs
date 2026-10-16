@@ -77,11 +77,6 @@ namespace ePrescriptions.Core.Helpers
             int availPx = UnitsToPixels(Math.Max(0, availUnits));
 
             int heightParam = availPx - BarcodeTextAreaPx;
-            if (halfBarcode && heightParam > MinBarsPx)
-            {
-                // تقليل ارتفاع الباركود إلى النصف تقريباً لتفادي تجاوزه الملصق وخروجه على ورقتين
-                heightParam = Math.Max(MinBarsPx, heightParam / 2);
-            }
 
             if (heightParam - 10 >= MinBarsPx && !isCompact)
             {
@@ -92,6 +87,14 @@ namespace ePrescriptions.Core.Helpers
             {
                 l.BarcodeIncludeText = false;
                 l.BarcodeHeightParam = Math.Min(Math.Max(availPx, 0), MaxBarcodeHeightParam);
+            }
+
+            if (halfBarcode && l.BarcodeHeightParam > MinBarsPx)
+            {
+                // تقليل ارتفاع الباركود إلى النصف تقريباً لتفادي تجاوزه الملصق وخروجه على ورقتين.
+                // بنطبّقه بعد اختيار الفرع (مش قبله) عشان التقليل ما يرميش الحساب في فرع "بدون أرقام"
+                // اللي بياخد المساحة المتبقية كلها.
+                l.BarcodeHeightParam = Math.Max(MinBarsPx, l.BarcodeHeightParam / 2);
             }
 
             int bitmapPx = l.BarcodeHeightParam + (l.BarcodeIncludeText ? BarcodeTextAreaPx : 0);
