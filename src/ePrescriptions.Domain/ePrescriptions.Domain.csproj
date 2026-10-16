@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>9.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+    <RootNamespace>ePrescriptions.Domain</RootNamespace>
+    <AssemblyName>ePrescriptions.Domain</AssemblyName>
+    <Version>1.0.0</Version>
+    <Company>Maged Fayez</Company>
+    <Authors>Maged Fayez</Authors>
+    <Product>E-Prescriptions by Maged Fayez</Product>
+    <Copyright>(C) all rights reserved</Copyright>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ePrescriptions.Core\ePrescriptions.Core.csproj" />
+  </ItemGroup>
+
+</Project>
