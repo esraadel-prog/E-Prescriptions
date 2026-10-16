@@ -410,7 +410,7 @@ namespace ePrescriptions.Data.Repositories
                 {
                     jCmd.Transaction = trans;
                     jCmd.CommandText = "SELECT EntryNumber, DebitAccount, CreditAccount, AmountPiastres FROM JournalEntries WHERE EntryNumber LIKE @p ORDER BY Id;";
-                    cmd.Parameters.Clear();
+                    jCmd.Parameters.Clear();
                     jCmd.Parameters.AddWithValue("@p", "JV-PUR-" + invoiceNumber + "-%");
                     using var jr = jCmd.ExecuteReader();
                     while (jr.Read())
