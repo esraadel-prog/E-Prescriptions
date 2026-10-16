@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType><UseAppHost>false</UseAppHost><RestoreSources>/nonexistent</RestoreSources><TargetFramework>net8.0</TargetFramework><LangVersion>9.0</LangVersion>
+    <Nullable>enable</Nullable><ImplicitUsings>disable</ImplicitUsings><EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <NoWarn>CS8600;CS8601;CS8602;CS8603;CS8604;CS8618;CS8625;CS0168;CS0219;CA1416;CS0618;SYSLIB0021</NoWarn>
+    <RootNamespace>ePrescriptions.Data</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Shim/*.cs;Program.cs" />
+    <Compile Include="../../src/ePrescriptions.Core/**/*.cs" Exclude="../../src/ePrescriptions.Core/Helpers/Code128BarcodeGenerator.cs;../../src/ePrescriptions.Core/Printing/*.cs;../../src/ePrescriptions.Core/Polyfills/*.cs;../../src/ePrescriptions.Core/**/obj/**;../../src/ePrescriptions.Core/**/bin/**" />
+    <Compile Include="../../src/ePrescriptions.Domain/**/*.cs" Exclude="../../src/ePrescriptions.Domain/**/obj/**;../../src/ePrescriptions.Domain/**/bin/**" />
+    <Compile Include="../../src/ePrescriptions.Data/**/*.cs" Exclude="../../src/ePrescriptions.Data/**/obj/**;../../src/ePrescriptions.Data/**/bin/**" />
+    <Compile Include="../../src/ePrescriptions.App/Services/BackupService.cs;../../src/ePrescriptions.App/Services/BackupAutomationService.cs;../../src/ePrescriptions.App/Services/BackupSchedulerHost.cs;../../src/ePrescriptions.App/Services/UserSessionService.cs;../../src/ePrescriptions.App/Services/SmartAlertsService.cs;../../src/ePrescriptions.App/ViewModels/ViewModelBase.cs;../../src/ePrescriptions.App/ViewModels/SalesViewModel.cs;../../src/ePrescriptions.App/ViewModels/SalesItemRow.cs;../../src/ePrescriptions.App/ViewModels/ItemAlternativeRow.cs;../../src/ePrescriptions.App/ViewModels/LoginViewModel.cs;../../src/ePrescriptions.App/ViewModels/StaffViewModel.cs;../../src/ePrescriptions.App/ViewModels/ZakatViewModel.cs;../../src/ePrescriptions.App/ViewModels/SmartAlertsViewModel.cs;../../src/ePrescriptions.App/ViewModels/ReportsViewModel.cs;../../src/ePrescriptions.App/ViewModels/StocktakeViewModel.cs;../../src/ePrescriptions.App/ViewModels/SupplierReturnsViewModel.cs;../../src/ePrescriptions.App/ViewModels/PurchaseOrdersViewModel.cs;../../src/ePrescriptions.App/ViewModels/PurchasesViewModel.cs;../../src/ePrescriptions.App/ViewModels/PriceListImportViewModel.cs;../../src/ePrescriptions.App/Services/IPriceListFileReader.cs" />
+    <Compile Include="../../tests/ePrescriptions.Tests/*.cs" Exclude="../../tests/ePrescriptions.Tests/ReportingAndExportTests.cs" />
+    <EmbeddedResource Include="../../src/ePrescriptions.Data/Migrations/*.sql" />
+  </ItemGroup>
+</Project>
