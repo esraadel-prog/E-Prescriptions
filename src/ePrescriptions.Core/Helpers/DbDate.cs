@@ -44,7 +44,7 @@ namespace ePrescriptions.Core.Helpers
 
         /// <summary>yyyy-MM-dd HH:mm:ss أو yyyy-MM-dd للعرض</summary>
         public static string Display(DateTime d) => Full(d);
-        public static string Display(string? s) => string.IsNullOrWhiteSpace(s) ? string.Empty : (TryParse(s, out var dt) ? Full(dt) : s);
+        public static string Display(string? s) => string.IsNullOrWhiteSpace(s) ? string.Empty : (TryParse(s, out var dt) ? Full(dt) : s!);
 
         // ===== القراءة =====
         /// <summary>قراءة تاريخ مخزّن (ISO أو yyyy-MM-dd [HH:mm:ss]) بثقافة ثابتة. يرمي استثناء لو النص مش تاريخ.</summary>

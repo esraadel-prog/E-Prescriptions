@@ -46,6 +46,9 @@ namespace ePrescriptions.Tests
             public System.Threading.Tasks.Task<string> ExportInventoryValuationReportAsync(InventoryValuationSummary summary, string pharmacyName) => System.Threading.Tasks.Task.FromResult(string.Empty);
             public string ExportCashierShiftsReport(System.Collections.Generic.List<CashierShiftSummaryRow> shifts, System.Collections.Generic.List<CashierDiscrepancySummary> summaries, DateTime from, DateTime to, string pharmacyName) => "export.xlsx";
             public System.Threading.Tasks.Task<string> ExportCashierShiftsReportAsync(System.Collections.Generic.List<CashierShiftSummaryRow> shifts, System.Collections.Generic.List<CashierDiscrepancySummary> summaries, DateTime from, DateTime to, string pharmacyName) => System.Threading.Tasks.Task.FromResult("export.xlsx");
+            public string ExportOpeningStockVoucher(OpeningStockVoucher voucher, string pharmacyName) => string.Empty;
+            public string ExportOpeningStockTemplate() => string.Empty;
+            public System.Threading.Tasks.Task<string> ExportOpeningStockVoucherAsync(OpeningStockVoucher voucher, string pharmacyName) => System.Threading.Tasks.Task.FromResult(string.Empty);
         }
 #pragma warning restore CS0067
 
