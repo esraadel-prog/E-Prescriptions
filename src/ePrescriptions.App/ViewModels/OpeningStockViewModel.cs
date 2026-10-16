@@ -52,6 +52,13 @@ namespace ePrescriptions.App.ViewModels
             set => SetProperty(ref _notes, value);
         }
 
+        private string _statusMessage = string.Empty;
+        public string StatusMessage
+        {
+            get => _statusMessage;
+            set => SetProperty(ref _statusMessage, value);
+        }
+
         // ===== حقول الإدخال السريع بالباركود =====
         private string _scanOrSearchText = string.Empty;
         public string ScanOrSearchText

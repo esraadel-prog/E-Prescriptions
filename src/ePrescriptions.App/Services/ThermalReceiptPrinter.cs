@@ -458,10 +458,13 @@ namespace ePrescriptions.App.Services
             }
         }
 
-        private static void DrawDottedLine(Graphics g, float y, float width)
+        private static void DrawDottedLine(Graphics g, float y, float x1, float x2)
         {
             using var pen = new Pen(Color.Black, 1f) { DashStyle = System.Drawing.Drawing2D.DashStyle.Dot };
-            g.DrawLine(pen, 0, y, width, y);
+            g.DrawLine(pen, x1, y, x2, y);
         }
+
+        private static void DrawDottedLine(Graphics g, float y, float width)
+            => DrawDottedLine(g, y, 0, width);
     }
 }
