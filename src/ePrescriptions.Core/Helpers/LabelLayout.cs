@@ -83,7 +83,7 @@ namespace ePrescriptions.Core.Helpers
                 heightParam = Math.Max(MinBarsPx, heightParam / 2);
             }
 
-            if (heightParam >= MinBarsPx && !isCompact)
+            if (heightParam - 10 >= MinBarsPx && !isCompact)
             {
                 l.BarcodeIncludeText = true;
                 l.BarcodeHeightParam = Math.Min(heightParam, MaxBarcodeHeightParam);

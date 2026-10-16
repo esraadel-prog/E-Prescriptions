@@ -558,7 +558,7 @@ namespace ePrescriptions.App.Services
             ws.Cell(1, 1).Style.Font.FontSize = 16;
             ws.Range(1, 1, 1, 12).Merge().Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 
-            ws.Cell(2, 1).Value = $"سند حصر رصيد أول المدة - رقم: {voucher.VoucherNumber} | التاريخ: {voucher.VoucherDate:yyyy-MM-dd}";
+            ws.Cell(2, 1).Value = $"سند حصر رصيد أول المدة - رقم: {voucher.VoucherNumber} | التاريخ: {DbDate.Date(voucher.VoucherDate)}";
             ws.Cell(2, 1).Style.Font.Bold = true;
             ws.Cell(2, 1).Style.Font.FontSize = 12;
             ws.Range(2, 1, 2, 12).Merge().Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
@@ -611,7 +611,7 @@ namespace ePrescriptions.App.Services
                 ws.Cell(dataRow, 4).Value = line.ItemNameAr;
                 ws.Cell(dataRow, 5).Value = line.ActiveIngredient;
                 ws.Cell(dataRow, 6).Value = line.BatchNumber;
-                ws.Cell(dataRow, 7).Value = line.ExpiryDate.ToString("yyyy-MM-dd");
+                ws.Cell(dataRow, 7).Value = DbDate.Date(line.ExpiryDate);
                 ws.Cell(dataRow, 8).Value = line.QuantityBoxes;
                 ws.Cell(dataRow, 9).Value = line.QuantityStrips;
                 ws.Cell(dataRow, 10).Value = line.QuantityUnits;

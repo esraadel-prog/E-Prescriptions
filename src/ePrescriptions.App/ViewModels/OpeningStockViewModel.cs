@@ -363,7 +363,7 @@ namespace ePrescriptions.App.ViewModels
             }
             catch
             {
-                VoucherNumber = $"OP-{DateTime.Now:yyyy}-00001";
+                VoucherNumber = $"OP-{DateTime.Now.Year}-00001";
             }
             VoucherDate = DateTime.Today;
             Notes = "حصر رصيد أول المدة قبل بدء التشغيل الفعلي";
@@ -380,7 +380,7 @@ namespace ePrescriptions.App.ViewModels
             EntryActiveIngredient = string.Empty;
             EntryStripsPerBox = 1;
             EntryPiecesPerStrip = 10;
-            EntryBatchNumber = $"OP-{DateTime.Now:yyyyMMdd}";
+            EntryBatchNumber = $"OP-{DbDate.Compact(DateTime.Now)}";
             EntryExpiryDate = DateTime.Today.AddYears(2);
             EntryQuantityBoxes = 1;
             EntryQuantityStrips = 0;
@@ -429,7 +429,7 @@ namespace ePrescriptions.App.ViewModels
             IsNewItemForm = true;
             EntryItemId = 0;
             EntryItemBarcode = query;
-            EntryItemCode = $"MED-{DateTime.Now:yyyyMMdd}-{Lines.Count + 1:D3}";
+            EntryItemCode = $"MED-{DbDate.Compact(DateTime.Now)}-{Lines.Count + 1:D3}";
             EntryItemNameAr = string.Empty;
             EntryItemNameEn = string.Empty;
             EntryActiveIngredient = string.Empty;
@@ -440,7 +440,7 @@ namespace ePrescriptions.App.ViewModels
             EntryQuantityBoxes = 1;
             EntryQuantityStrips = 0;
             EntryQuantityUnits = 0;
-            EntryBatchNumber = $"OP-{DateTime.Now:yyyyMMdd}";
+            EntryBatchNumber = $"OP-{DbDate.Compact(DateTime.Now)}";
             EntryExpiryDate = DateTime.Today.AddYears(2);
             UpdateUnitsPreview();
 
@@ -468,7 +468,7 @@ namespace ePrescriptions.App.ViewModels
             }
             else
             {
-                EntryBatchNumber = $"OP-{DateTime.Now:yyyyMMdd}";
+                EntryBatchNumber = $"OP-{DbDate.Compact(DateTime.Now)}";
                 EntryExpiryDate = DateTime.Today.AddYears(2);
             }
 
@@ -511,7 +511,7 @@ namespace ePrescriptions.App.ViewModels
                 ActiveIngredient = EntryActiveIngredient?.Trim() ?? string.Empty,
                 StripsPerBox = Math.Max(1, EntryStripsPerBox),
                 PiecesPerStrip = Math.Max(1, EntryPiecesPerStrip),
-                BatchNumber = string.IsNullOrWhiteSpace(EntryBatchNumber) ? $"OP-{DateTime.Now:yyyyMMdd}" : EntryBatchNumber.Trim(),
+                BatchNumber = string.IsNullOrWhiteSpace(EntryBatchNumber) ? $"OP-{DbDate.Compact(DateTime.Now)}" : EntryBatchNumber.Trim(),
                 ExpiryDate = EntryExpiryDate,
                 QuantityBoxes = EntryQuantityBoxes,
                 QuantityStrips = EntryQuantityStrips,
@@ -737,11 +737,11 @@ namespace ePrescriptions.App.ViewModels
                     if (int.TryParse(sheet.Cell(r, 6).GetString(), out int pVal) && pVal > 0) pieces = pVal;
 
                     string batch = sheet.Cell(r, 7).GetString().Trim();
-                    if (string.IsNullOrWhiteSpace(batch)) batch = $"OP-{DateTime.Now:yyyyMMdd}";
+                    if (string.IsNullOrWhiteSpace(batch)) batch = $"OP-{DbDate.Compact(DateTime.Now)}";
 
                     DateTime expiry = DateTime.Today.AddYears(2);
                     string expStr = sheet.Cell(r, 8).GetString().Trim();
-                    if (DateTime.TryParse(expStr, out var expDt)) expiry = expDt;
+                    if (DbDate.TryParse(expStr, out var expDt)) expiry = expDt;
 
                     int qBoxes = 0;
                     if (int.TryParse(sheet.Cell(r, 9).GetString(), out int qbVal)) qBoxes = qbVal;

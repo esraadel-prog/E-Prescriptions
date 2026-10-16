@@ -311,7 +311,10 @@ namespace ePrescriptions.Data.Repositories
                     alterCmd.CommandText = "ALTER TABLE PurchaseInvoices ADD COLUMN Status INTEGER NOT NULL DEFAULT 1;";
                     alterCmd.ExecuteNonQuery();
                 }
-                catch { /* العمود موجود بالفعل */ }
+                catch (Exception ex)
+                {
+                    Logger.LogInfo("Status column check: " + ex.Message, "PurchaseRepository.CancelPurchaseInvoice");
+                }
 
                 int id = 0;
                 string invoiceNumber = string.Empty;
@@ -477,7 +480,7 @@ namespace ePrescriptions.Data.Repositories
                     InvoiceNumber = r["InvoiceNumber"].ToString() ?? string.Empty,
                     SupplierId = Convert.ToInt32(r["SupplierId"]),
                     SupplierName = r["SupplierName"].ToString() ?? string.Empty,
-                    InvoiceDate = DateTime.TryParse(r["InvoiceDate"].ToString(), out var dt) ? dt : DateTime.Now,
+                    InvoiceDate = DbDate.TryParse(r["InvoiceDate"].ToString(), out var dt) ? dt : DateTime.Now,
                     SubtotalPiastres = Convert.ToInt64(r["SubtotalHalalas"]),
                     VatPiastres = Convert.ToInt64(r["VatHalalas"]),
                     TotalPiastres = Convert.ToInt64(r["TotalHalalas"]),
@@ -498,7 +501,7 @@ namespace ePrescriptions.Data.Repositories
                     InvoiceNumber = r2["InvoiceNumber"].ToString() ?? string.Empty,
                     SupplierId = Convert.ToInt32(r2["SupplierId"]),
                     SupplierName = r2["SupplierName"].ToString() ?? string.Empty,
-                    InvoiceDate = DateTime.TryParse(r2["InvoiceDate"].ToString(), out var dt) ? dt : DateTime.Now,
+                    InvoiceDate = DbDate.TryParse(r2["InvoiceDate"].ToString(), out var dt) ? dt : DateTime.Now,
                     SubtotalPiastres = Convert.ToInt64(r2["SubtotalHalalas"]),
                     VatPiastres = Convert.ToInt64(r2["VatHalalas"]),
                     TotalPiastres = Convert.ToInt64(r2["TotalHalalas"]),

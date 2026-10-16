@@ -37,7 +37,7 @@ namespace ePrescriptions.Data.Repositories
         public string PeekNextVoucherNumber()
         {
             using var conn = _dbContext.CreateConnection();
-            string yearKey = $"OP-{DateTime.Now:yyyy}";
+            string yearKey = $"OP-{DateTime.Now.Year}";
             long nextSeq = NumberSequence.Peek(conn, yearKey, "OpeningStockVouchers", "VoucherNumber");
             return NumberSequence.Format(yearKey, nextSeq);
         }
@@ -58,7 +58,7 @@ namespace ePrescriptions.Data.Repositories
             try
             {
                 // 1) حجز رقم السند الرسمي بعدّاد تسلسلي آمن
-                string yearKey = $"OP-{voucher.VoucherDate:yyyy}";
+                string yearKey = $"OP-{voucher.VoucherDate.Year}";
                 long seq = NumberSequence.Next(conn, trans, yearKey, "OpeningStockVouchers", "VoucherNumber");
                 voucher.VoucherNumber = NumberSequence.Format(yearKey, seq);
 
@@ -126,7 +126,7 @@ namespace ePrescriptions.Data.Repositories
                         {
                             // إنشاء كود تلقائي إن لم يُحدد
                             string itemCode = string.IsNullOrWhiteSpace(line.ItemCode)
-                                ? $"MED-{DateTime.Now:yyyyMMdd}-{lineIndex:D3}"
+                                ? $"MED-{DbDate.Compact(DateTime.Now)}-{lineIndex:D3}"
                                 : line.ItemCode.Trim();
 
                             using var insertItemCmd = conn.CreateCommand();
@@ -138,14 +138,14 @@ namespace ePrescriptions.Data.Repositories
                                     WholesalePriceBoxPiastres, CostPriceBoxPiastres,
                                     MinStockAlertSmallestUnits, IsPrescriptionRequired,
                                     IsVatExempt, CustomVatPercent, TotalStockSmallestUnits,
-                                    OversoldSmallestUnits, IsActive, CreatedAt
+                                    OversoldSmallestUnits, IsActive
                                 ) VALUES (
                                     @code, @barcode, @nameAr, @nameEn, @active,
                                     @strips, @pieces, @retail,
                                     @wholesale, @cost,
                                     30, 0,
                                     0, -1, 0,
-                                    0, 1, datetime('now')
+                                    0, 1
                                 );
                                 SELECT last_insert_rowid();";
 
@@ -167,7 +167,7 @@ namespace ePrescriptions.Data.Repositories
 
                     // ب) إنشاء التشغيلة واستيعاب الرصيد السالب إن وُجد
                     string batchNumber = string.IsNullOrWhiteSpace(line.BatchNumber)
-                        ? $"OP-{voucher.VoucherDate:yyyyMMdd}"
+                        ? $"OP-{DbDate.Compact(voucher.VoucherDate)}"
                         : line.BatchNumber.Trim();
 
                     long unitCostPiastres = (line.CostPriceBoxPiastres + (perBox / 2)) / Math.Max(1, perBox);
@@ -405,7 +405,7 @@ namespace ePrescriptions.Data.Repositories
             {
                 Id = Convert.ToInt32(reader["Id"]),
                 VoucherNumber = reader["VoucherNumber"]?.ToString() ?? string.Empty,
-                VoucherDate = DateTime.TryParse(reader["VoucherDate"]?.ToString(), out var dt) ? dt : DateTime.Today,
+                VoucherDate = DbDate.TryParse(reader["VoucherDate"]?.ToString(), out var dt) ? dt : DateTime.Today,
                 Notes = reader["Notes"]?.ToString() ?? string.Empty,
                 CreatedByUserId = Convert.ToInt32(reader["CreatedByUserId"]),
                 CreatedByUserName = reader["CreatedByUserName"]?.ToString() ?? string.Empty,
@@ -413,7 +413,7 @@ namespace ePrescriptions.Data.Repositories
                 TotalSmallestUnits = Convert.ToInt32(reader["TotalSmallestUnits"]),
                 TotalCostPiastres = Convert.ToInt64(reader["TotalCostPiastres"]),
                 TotalRetailPiastres = Convert.ToInt64(reader["TotalRetailPiastres"]),
-                CreatedAt = DateTime.TryParse(reader["CreatedAt"]?.ToString(), out var cat) ? cat : DateTime.Now
+                CreatedAt = DbDate.TryParse(reader["CreatedAt"]?.ToString(), out var cat) ? cat : DateTime.Now
             };
         }
 
@@ -432,7 +432,7 @@ namespace ePrescriptions.Data.Repositories
                 StripsPerBox = Convert.ToInt32(reader["StripsPerBox"]),
                 PiecesPerStrip = Convert.ToInt32(reader["PiecesPerStrip"]),
                 BatchNumber = reader["BatchNumber"]?.ToString() ?? string.Empty,
-                ExpiryDate = DateTime.TryParse(reader["ExpiryDate"]?.ToString(), out var exp) ? exp : DateTime.Today.AddYears(2),
+                ExpiryDate = DbDate.TryParse(reader["ExpiryDate"]?.ToString(), out var exp) ? exp : DateTime.Today.AddYears(2),
                 QuantityBoxes = Convert.ToInt32(reader["QuantityBoxes"]),
                 QuantityStrips = Convert.ToInt32(reader["QuantityStrips"]),
                 QuantityUnits = Convert.ToInt32(reader["QuantityUnits"]),
