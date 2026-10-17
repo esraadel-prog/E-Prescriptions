@@ -204,18 +204,56 @@ namespace ePrescriptions.App
             services.AddSingleton<MainWindow>();
         }
 
+        // حارس تكرار رسائل الخطأ: لو نفس الخطأ بيتكرر (مثلاً أثناء رسم الشاشة) ما نفتحش مئات الرسائل فيهنج البرنامج
+        private bool _errorDialogOpen;
+        private string _lastErrorMessage = string.Empty;
+        private int _repeatedErrorCount;
+        private DateTime _lastErrorShownUtc = DateTime.MinValue;
+        private const int MaxRepeatedErrorDialogs = 2;
+        private static readonly TimeSpan RepeatedErrorWindow = TimeSpan.FromSeconds(30);
+
         private void SetupGlobalExceptionHandling()
         {
             DispatcherUnhandledException += (s, args) =>
             {
+                // دايماً نسجّل في الملف (مع التفاصيل)، لكن الرسالة على الشاشة بتتحكم فيها الشروط تحت
                 Logger.LogException(args.Exception, "DispatcherUnhandledException");
-                MessageBox.Show(
-                    $"حدث خطأ أثناء تنفيذ العملية:\n{args.Exception.Message}\nتم تسجيل التفاصيل في السجل دون إغلاق البرنامج.",
-                    "تنبيه - خطأ غير معالج",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Warning
-                );
                 args.Handled = true; // منع إغلاق البرنامج فجأة
+
+                // رسالة مفتوحة بالفعل: الخطأ ده جه أثناء ما الرسالة مفتوحة (إعادة دخول) فمنعرضش واحدة تانية
+                if (_errorDialogOpen) return;
+
+                var now = DateTime.UtcNow;
+                string msg = args.Exception.Message ?? string.Empty;
+                if (msg == _lastErrorMessage && now - _lastErrorShownUtc < RepeatedErrorWindow)
+                {
+                    _repeatedErrorCount++;
+                }
+                else
+                {
+                    _lastErrorMessage = msg;
+                    _repeatedErrorCount = 0;
+                }
+
+                // نفس الخطأ اتعرض كفاية: نكتفي بالتسجيل في اللوج لحد ما تعدّي المهلة
+                if (_repeatedErrorCount >= MaxRepeatedErrorDialogs) return;
+
+                _lastErrorShownUtc = now;
+                _errorDialogOpen = true;
+                try
+                {
+                    MessageBox.Show(
+                        $"حدث خطأ أثناء تنفيذ العملية:\n{msg}\nتم تسجيل التفاصيل في السجل دون إغلاق البرنامج.",
+                        "تنبيه - خطأ غير معالج",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning
+                    );
+                }
+                finally
+                {
+                    _errorDialogOpen = false;
+                    _lastErrorShownUtc = DateTime.UtcNow;
+                }
             };
 
             AppDomain.CurrentDomain.UnhandledException += (s, args) =>
